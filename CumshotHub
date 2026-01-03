@@ -50,13 +50,13 @@ Rayfield:Notify({
 local Button = MainTab:CreateButton({
    Name = "Cursed Cave",
    Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-7120.7, -710.35, -2544.24)))
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-7120.7, -680.35, -2544.24)))
    end,
 })
 local Button = MainTab:CreateButton({
    Name = "Volcano lava lake thing",
    Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-7192.03, -572.07, -2729)))
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-7192.03, -552.07, -2729)))
    end,
 })
 
@@ -71,7 +71,7 @@ local Button = MainTab:CreateButton({
 local Button = MainTab:CreateButton({
    Name = "Cloudnite",
    Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-7248.8, 781.63, -3245.66)))
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-7248.8, 800.63, -3245.66)))
    end,
 })
 
@@ -79,7 +79,7 @@ local Button = MainTab:CreateButton({
 local Button = MainTab:CreateButton({
    Name = "Crystal cave",
    Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-6607.08, -594.51, 818.83)))
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-6607.08, -574.51, 818.83)))
    end,
 })
 
@@ -87,28 +87,28 @@ local Button = MainTab:CreateButton({
 local Button = MainTab:CreateButton({
    Name = "Oil Rig",
    Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-2297.17, 114.72, 5395.78))) 
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-2297.17, 134.72, 5395.78))) 
    end,
 })
 
 local Button = MainTab:CreateButton({
    Name = "Lunar Palace",
    Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-6230.04, 129.77, 4832.62)))
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-6230.04, 149.77, 4832.62)))
    end,
 })
 
 local Button = MainTab:CreateButton({
    Name = "Sakura Cave",
    Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-5186.41, 114.53, 5249.52))) 
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-5186.41, 134.53, 5249.52))) 
    end,
 })
 
 local Button = MainTab:CreateButton({
    Name = "SporeCave",
    Callback = function()
-   ggame.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-5407.38, -174.13, 5283.38)))
+   ggame.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-5407.38, -154.13, 5283.38)))
    end,
 })
 
@@ -118,40 +118,40 @@ local SecondSection = SecondTab:CreateSection("Teleports (VEHICLE SUPPORT)")
 local Button = SecondTab:CreateButton({
    Name = "ucs",
    Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1262.15, 31.37, -700.86)))
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1262.15, 33.37, -700.86)))
    end,
 })
 local Button = SecondTab:CreateButton({
    Name = "Beach shop",
    Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1788.73, 4.5, -1365.55)))
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1788.73, 24.5, -1365.55)))
    end,
 })
 local Button = SecondTab:CreateButton({
    Name = "Silvers",
    Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(920.57, 31.36, -705.38)))
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(920.57, 51.36, -705.38)))
    end,
 })
 
 local Button = SecondTab:CreateButton({
    Name = "Coals Furniture",
    Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1175.73, 102.84, 545.74)))
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1175.73, 122.84, 545.74)))
    end,
 })
 
 local Button = SecondTab:CreateButton({
    Name = "Vi s",
    Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-5171.56, 86.73, -2806.18)))
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-5171.56, 106.73, -2806.18)))
    end,
 })
 
 local Button = SecondTab:CreateButton({
    Name = "Melonis shop",
    Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-579.87, -529.99, 1022.24)))
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-579.87, -509.99, 1022.24)))
     end,
 })
 
@@ -159,7 +159,7 @@ local Button = SecondTab:CreateButton({
 local Button = SecondTab:CreateButton({
    Name = "oil shop",
    Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-2279.97, 77.15, 5339.59)))
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-2279.97, 97.15, 5339.59)))
    end,
 })
 
