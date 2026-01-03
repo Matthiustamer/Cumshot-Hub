@@ -36,7 +36,7 @@ local Window = Rayfield:CreateWindow({
       Key = {"xanderiscute"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
    }
 })
-
+-- MAIN TAB --
 local MainTab = Window:CreateTab("Main🏠", nil) -- Title, Image
 local MainSection = MainTab:CreateSection("Teleports (VEHICLE SUPPORT)")
 
@@ -60,7 +60,59 @@ local Button = MainTab:CreateButton({
    end,
 })
 
+local Button = MainTab:CreateButton({
+   Name = "Kings Hall",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-1866.3, -590.28, 2234.95)))
+   end,
+})
 
+
+local Button = MainTab:CreateButton({
+   Name = "Cloudnite",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-7248.8, 781.63, -3245.66)))
+   end,
+})
+
+
+local Button = MainTab:CreateButton({
+   Name = "Crystal cave",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-6607.08, -594.51, 818.83)))
+   end,
+})
+
+
+local Button = MainTab:CreateButton({
+   Name = "Oil Rig",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-2297.17, 114.72, 5395.78))) 
+   end,
+})
+
+local Button = MainTab:CreateButton({
+   Name = "Lunar Palace",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-6230.04, 129.77, 4832.62)))
+   end,
+})
+
+local Button = MainTab:CreateButton({
+   Name = "Sakura Cave",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-5186.41, 114.53, 5249.52))) 
+   end,
+})
+
+local Button = MainTab:CreateButton({
+   Name = "SporeCave",
+   Callback = function()
+   ggame.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-5407.38, -174.13, 5283.38)))
+   end,
+})
+
+-- TAB 2 --
 local SecondTab = Window:CreateTab("Shop Tp🏠", nil) -- Title, Image
 local SecondSection = SecondTab:CreateSection("Teleports (VEHICLE SUPPORT)")
 local Button = SecondTab:CreateButton({
@@ -90,6 +142,13 @@ local Button = SecondTab:CreateButton({
 })
 
 local Button = SecondTab:CreateButton({
+   Name = "Vi s",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-5171.56, 86.73, -2806.18)))
+   end,
+})
+
+local Button = SecondTab:CreateButton({
    Name = "Melonis shop",
    Callback = function()
    game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-579.87, -529.99, 1022.24)))
@@ -97,12 +156,26 @@ local Button = SecondTab:CreateButton({
 })
 
 
+local Button = SecondTab:CreateButton({
+   Name = "oil shop",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-2279.97, 77.15, 5339.59)))
+   end,
+})
 
+--THIRD TAB--
 local thirdTab = Window:CreateTab("Useful tols", nil) -- Title, Image
 local thirdSection = thirdTab:CreateSection("Necesities")
 local Button = thirdTab:CreateButton({
    Name = "IY",
    Callback = function()
    loadstring(game:HttpGet('https://raw.githubusercontent.com/DarkNetworks/Infinite-Yield/main/latest.lua'))()
+   end,
+})
+
+local Button = thirdTab:CreateButton({
+   Name = "Set ur own TP",
+   Callback = function()
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/oxireun/Script/refs/heads/main/teleporter.lua"))()
    end,
 })
