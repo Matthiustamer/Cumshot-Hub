@@ -1,0 +1,108 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "Cumshot Hub",
+   Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   LoadingTitle = "Rayfield Interface Suite",
+   LoadingSubtitle = "by uhhh idk",
+   ShowText = "Rayfield", -- for mobile users to unhide rayfield, change if you'd like
+   Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+
+   ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
+
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil, -- Create a custom folder for your hub/game
+      FileName = "Cumshot Hub"
+   },
+
+   Discord = {
+      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
+      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   },
+
+   KeySystem = true, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Cumshot Hub",
+      Subtitle = "Key System",
+      Note = "Only specific people are allowed to use.", -- Use this to tell the user how to get a key
+      FileName = "CumshotHub", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = false, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"xanderiscute"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
+
+local MainTab = Window:CreateTab("Main🏠", nil) -- Title, Image
+local MainSection = MainTab:CreateSection("Teleports (VEHICLE SUPPORT)")
+
+Rayfield:Notify({
+   Title = "Cumshot Executed Sucessfuly!",
+   Content = "sorry im a teenagr i cant spell",
+   Duration = 6.5,
+   Image = nil,
+})
+
+local Button = MainTab:CreateButton({
+   Name = "Cursed Cave",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-7120.7, -710.35, -2544.24)))
+   end,
+})
+local Button = MainTab:CreateButton({
+   Name = "Volcano lava lake thing",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-7192.03, -572.07, -2729)))
+   end,
+})
+
+
+local SecondTab = Window:CreateTab("Shop Tp🏠", nil) -- Title, Image
+local SecondSection = SecondTab:CreateSection("Teleports (VEHICLE SUPPORT)")
+local Button = SecondTab:CreateButton({
+   Name = "ucs",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1262.15, 31.37, -700.86)))
+   end,
+})
+local Button = SecondTab:CreateButton({
+   Name = "Beach shop",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1788.73, 4.5, -1365.55)))
+   end,
+})
+local Button = SecondTab:CreateButton({
+   Name = "Silvers",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(920.57, 31.36, -705.38)))
+   end,
+})
+
+local Button = SecondTab:CreateButton({
+   Name = "Coals Furniture",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1175.73, 102.84, 545.74)))
+   end,
+})
+
+local Button = SecondTab:CreateButton({
+   Name = "Melonis shop",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-579.87, -529.99, 1022.24)))
+    end,
+})
+
+
+
+local thirdTab = Window:CreateTab("Useful tols", nil) -- Title, Image
+local thirdSection = thirdTab:CreateSection("Necesities")
+local Button = thirdTab:CreateButton({
+   Name = "IY",
+   Callback = function()
+   loadstring(game:HttpGet('https://raw.githubusercontent.com/DarkNetworks/Infinite-Yield/main/latest.lua'))()
+   end,
+})
