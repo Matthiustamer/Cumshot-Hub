@@ -38,8 +38,48 @@ local Window = Rayfield:CreateWindow({
       Key = {"xanderiscute"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
    }
 })
+
+local currentTween: Tween?
+
+local function stopTween()
+	if currentTween and currentTween.PlaybackState == Enum.PlaybackState.Playing then
+		currentTween:Cancel()
+	end
+	currentTween = nil
+end
+
+local function tweenTo(pos: Vector3, lookAt: boolean?, waitForTween: boolean?)
+    local TweenService = game:GetService("TweenService")
+	local char = plr.Character
+	if not char then return end
+
+	local root = char:FindFirstChild("HumanoidRootPart")
+	if not root then return end
+
+	local targetCFrame = lookAt and CFrame.lookAt(pos, root.Position) or CFrame.new(pos)
+	local dist = (root.Position - pos).Magnitude
+
+	if currentTween and currentTween.PlaybackState == Enum.PlaybackState.Playing then
+		return
+	end
+
+	local tween = TweenService:Create(
+		root,
+		TweenInfo.new(dist / 250, Enum.EasingStyle.Linear),
+		{ CFrame = targetCFrame }
+	)
+
+	currentTween = tween
+	tween:Play()
+
+	if waitForTween then
+		tween.Completed:Wait()
+	end
+end
+
+
 -- MAIN TAB --
-local MainTab = Window:CreateTab("MainðŸ ", nil) -- Title, Image
+local MainTab = Window:CreateTab("Main🏠", nil) -- Title, Image
 local MainSection = MainTab:CreateSection("Teleports (VEHICLE SUPPORT)")
 
 Rayfield:Notify({
@@ -121,6 +161,7 @@ local oreOptions = {}
 for _,oreModel in oreList:GetChildren() do
     table.insert(oreOptions,oreModel.Name)
 end
+table.sort(oreOptions)
 local matbtp = blocktptab:CreateDropdown({
     Name = "Material Whitelist",
     Options = oreOptions,
@@ -132,22 +173,44 @@ local matbtp = blocktptab:CreateDropdown({
 local trybring = blocktptab:CreateButton({
     Name = "try tp mat thing",
     Callback = function()
-        local rem = game:GetService("Players").LocalPlayer:WaitForChild("Action")
         local char = plr.Character
-        local oldPos = char.CFrane
+        local oldPos = char.PrimaryPart.CFrame
         if not char:FindFirstChild("Item Bag") then
             plr.Backpack["Item Bag"].Parent = char
         end
+        local rem = char:WaitForChild("Item Bag"):WaitForChild("Action")
+        local selectedMats = matbtp.CurrentOption
+        local currentIndex = 1
         for _,v in workspace.Grab:GetChildren() do
-            if v:FindFirstChild("Owner") and v.Owner.Value == plr and v:GetAttribute("Material") == "Stone" then
-                char:PivotTo(v.Part.CFrame)
+            if not v:FindFirstChild("Owner") then continue end
+            if not table.find(selectedMats, v:GetAttribute("Material")) then continue end
+            if not v:FindFirstChild("Part") then continue end
+            if v.Owner.Value == plr or true then
+                print("Current Index:",currentIndex)
+                tweenTo(v.Part.Position, false, true)
                 task.wait(.1)
                 rem:FireServer("Store",v.Part)
-                break
+                task.wait(.5)
+                currentIndex = currentIndex + 1
+                if currentIndex >= 5 then
+                    for i=1,5 do
+                        char:PivotTo(oldPos)
+                        task.wait(.1)
+                        rem:FireServer("Drop")
+                        task.wait(.3)
+                    end
+                    currentIndex = 1
+                end
             end
         end
-        task.wait(.1)
-        rem:FireServer("Drop")
+    end
+})
+
+blocktptab:CreateButton({
+    Name = "Stop Tween",
+    Callback = function()
+        local char = plr.Character
+        stopTween()
     end
 })
 
@@ -239,7 +302,7 @@ oreESPToggle = visualsTab:CreateToggle({
     end
 })
 -- TAB 2 --
-local SecondTab = Window:CreateTab("Shop TpðŸ ", nil) -- Title, Image
+local SecondTab = Window:CreateTab("Shop Tp🏠", nil) -- Title, Image
 local SecondSection = SecondTab:CreateSection("Teleports (VEHICLE SUPPORT)")
 local Button = SecondTab:CreateButton({
    Name = "ucs",
@@ -292,6 +355,388 @@ local Button = SecondTab:CreateButton({
 --THIRD TAB--
 local thirdTab = Window:CreateTab("Useful tols", nil) -- Title, Image
 local thirdSection = thirdTab:CreateSection("Necesities")
+local Button = thirdTab:CreateButton({
+   Name = "IY",
+   Callback = function()
+   loadstring(game:HttpGet('https://raw.githubusercontent.com/DarkNetworks/Infinite-Yield/main/latest.lua'))()
+   end,
+})
+
+local Button = thirdTab:CreateButton({
+   Name = "Set ur own TP",
+   Callback = function()
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/oxireun/Script/refs/heads/main/teleporter.lua"))()
+   end,
+})local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local plr = game.Players.LocalPlayer
+
+local Window = Rayfield:CreateWindow({
+   Name = "Cumshot Hub",
+   Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   LoadingTitle = "Rayfield Interface Suite",
+   LoadingSubtitle = "by uhhh idk",
+   ShowText = "Rayfield", -- for mobile users to unhide rayfield, change if you'd like
+   Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+
+   ToggleUIKeybind = Enum.KeyCode.RightControl, -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
+
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil, -- Create a custom folder for your hub/game
+      FileName = "Cumshot Hub"
+   },
+
+   Discord = {
+      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
+      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   },
+
+   KeySystem = true, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Cumshot Hub",
+      Subtitle = "Key System",
+      Note = "Only specific people are allowed to use.", -- Use this to tell the user how to get a key
+      FileName = "CumshotHub", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = false, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"xanderiscute"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
+
+local currentTween: Tween?
+
+local function stopTween()
+	if currentTween and currentTween.PlaybackState == Enum.PlaybackState.Playing then
+		currentTween:Cancel()
+	end
+	currentTween = nil
+end
+
+local function tweenTo(pos: Vector3, lookAt: boolean?, waitForTween: boolean?)
+    local TweenService = game:GetService("TweenService")
+	local char = plr.Character
+	if not char then return end
+
+	local root = char:FindFirstChild("HumanoidRootPart")
+	if not root then return end
+
+	local targetCFrame = lookAt and CFrame.lookAt(pos, root.Position) or CFrame.new(pos)
+	local dist = (root.Position - pos).Magnitude
+
+	if currentTween and currentTween.PlaybackState == Enum.PlaybackState.Playing then
+		return
+	end
+
+	local tween = TweenService:Create(
+		root,
+		TweenInfo.new(dist / 250, Enum.EasingStyle.Linear),
+		{ CFrame = targetCFrame }
+	)
+
+	currentTween = tween
+	tween:Play()
+
+	if waitForTween then
+		tween.Completed:Wait()
+	end
+end
+
+
+-- MAIN TAB --
+local MainTab = Window:CreateTab("Main🏠", nil) -- Title, Image
+local MainSection = MainTab:CreateSection("Teleports (VEHICLE SUPPORT)")
+
+Rayfield:Notify({
+   Title = "Cumshot Executed Sucessfuly!",
+   Content = "sorry im a teenagr i cant spell",
+   Duration = 6.5,
+   Image = nil,
+})
+
+local Button = MainTab:CreateButton({
+   Name = "Cursed Cave",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-7120.7, -680.35, -2544.24)))
+   end,
+})
+local Button = MainTab:CreateButton({
+   Name = "Volcano lava lake thing",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-7192.03, -552.07, -2729)))
+   end,
+})
+
+local Button = MainTab:CreateButton({
+   Name = "Kings Hall",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-1866.3, -590.28, 2234.95)))
+   end,
+})
+
+
+local Button = MainTab:CreateButton({
+   Name = "Cloudnite",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-7248.8, 800.63, -3245.66)))
+   end,
+})
+
+
+local Button = MainTab:CreateButton({
+   Name = "Crystal cave",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-6607.08, -574.51, 818.83)))
+   end,
+})
+
+
+local Button = MainTab:CreateButton({
+   Name = "Oil Rig",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-2297.17, 134.72, 5395.78))) 
+   end,
+})
+
+local Button = MainTab:CreateButton({
+   Name = "Lunar Palace",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-6230.04, 149.77, 4832.62)))
+   end,
+})
+
+local Button = MainTab:CreateButton({
+    Name = "Sakura Cave",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-5186.41, 134.53, 5249.52))) 
+   end,
+})
+
+local Button = MainTab:CreateButton({
+    Name = "SporeCave",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-5407.38, -154.13, 5283.38)))
+   end,
+})
+
+local blocktptab = Window:CreateTab("Block tp thing yeah ", nil) 
+blocktptab:CreateSection("tp w bag")
+local oreList = game:GetService("ReplicatedStorage").Content.Ores
+local oreOptions = {}
+for _,oreModel in oreList:GetChildren() do
+    table.insert(oreOptions,oreModel.Name)
+end
+table.sort(oreOptions)
+local matbtp = blocktptab:CreateDropdown({
+    Name = "Material Whitelist",
+    Options = oreOptions,
+    CurrentOption = {},
+    MultipleOptions = true,
+    Callback = function()end
+})
+
+local trybring = blocktptab:CreateButton({
+    Name = "try tp mat thing",
+    Callback = function()
+        local char = plr.Character
+        local oldPos = char.PrimaryPart.CFrame
+        if not char:FindFirstChild("Item Bag") then
+            plr.Backpack["Item Bag"].Parent = char
+        end
+        local rem = char:WaitForChild("Item Bag"):WaitForChild("Action")
+        local selectedMats = matbtp.CurrentOption
+        local currentIndex = 1
+        for _,v in workspace.Grab:GetChildren() do
+            if not v:FindFirstChild("Owner") then continue end
+            if not table.find(selectedMats, v:GetAttribute("Material")) then continue end
+            if not v:FindFirstChild("Part") then continue end
+            if v.Owner.Value == plr or true then
+                print("Current Index:",currentIndex)
+                tweenTo(v.Part.Position, false, true)
+                task.wait(.1)
+                rem:FireServer("Store",v.Part)
+                task.wait(.5)
+                currentIndex = currentIndex + 1
+                if currentIndex >= 5 then
+                    for i=1,5 do
+                        char:PivotTo(oldPos)
+                        task.wait(.1)
+                        rem:FireServer("Drop")
+                        task.wait(.3)
+                    end
+                    currentIndex = 1
+                end
+            end
+        end
+    end
+})
+
+blocktptab:CreateButton({
+    Name = "Stop Tween",
+    Callback = function()
+        local char = plr.Character
+        stopTween()
+    end
+})
+
+local visualsTab = Window:CreateTab("esp stuff", nil)
+visualsTab:CreateSection("Ore ESP")
+local worldOres = workspace.WorldSpawn.Ores
+
+table.sort(oreOptions)
+
+local oreESPDropdown = visualsTab:CreateDropdown({
+    Name = "Ore Whitelist",
+    Options = oreOptions,
+    CurrentOption = {},
+    MultipleOptions = true,
+    Callback = function()end
+})
+
+local ESPTextSize = visualsTab:CreateInput({
+    Name = "Text Size",
+    CurrentValue = "1",
+    PlaceholderText = "",
+    Callback = function()end
+})
+
+
+local oreESPToggle
+oreESPToggle = visualsTab:CreateToggle({
+    Name = "Enable ESP",
+    CurrentValue = false,
+    Callback = function(val)
+        if not val then return end
+        
+        while oreESPToggle.CurrentValue do
+            local root = plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
+            local selected = oreESPDropdown.CurrentOption
+            
+            if root then
+                for _, ore in ipairs(worldOres:GetChildren()) do
+                    if table.find(selected, ore.Name) then
+                        -- Determine the best part to attach ESP to
+                        local hittableFolder = ore:FindFirstChild("Hittable")
+                        local mainPart = ore:FindFirstChild("Hitbox") or ore.PrimaryPart or ore:FindFirstChildWhichIsA("BasePart")
+                        
+                        -- 1. Handle Box Adornments (Hittables)
+                        if hittableFolder then
+                            for _, hb in ipairs(hittableFolder:GetChildren()) do
+                                if hb:IsA("BasePart") and not hb:FindFirstChild("OreESP") then
+                                    local box = Instance.new("BoxHandleAdornment")
+                                    box.Name, box.Adornee, box.AlwaysOnTop, box.ZIndex = "OreESP", hb, true, 10
+                                    box.Size, box.Transparency, box.Color3 = hb.Size + Vector3.new(0.1, 0.1, 0.1), 0.5, Color3.new(1, 0, 0)
+                                    box.Parent = hb
+                                end
+                            end
+                        end
+
+                        -- 2. Handle Billboard Text (Fallback to mainPart if Hitbox is missing)
+                        if mainPart then
+                            local dist = math.floor((root.Position - mainPart.Position).Magnitude)
+                            local espText = mainPart:FindFirstChild("ESPText")
+                            
+                            if not espText then
+                                local gui = Instance.new("BillboardGui")
+                                gui.Name, gui.Adornee, gui.AlwaysOnTop, gui.Size = "ESPText", mainPart, true, UDim2.fromScale(3, 9)
+                                gui.StudsOffset = Vector3.new(0, 2, 0)
+                                
+                                local label = Instance.new("TextLabel")
+                                label.Size, label.BackgroundTransparency, label.TextScaled = UDim2.fromScale(1, 1), 1, true
+                                label.TextColor3, label.TextStrokeTransparency = Color3.new(1, 1, 1), 0
+                                label.Parent = gui
+                                gui.Parent = mainPart
+                                espText = gui
+                            end
+                            espText.TextLabel.Text = string.format("%s | %d studs", ore.Name, dist)
+                            local size = tonumber(ESPTextSize.CurrentValue) or 1
+                            espText.Size = UDim2.fromScale(1000, size)
+                        end
+                    end
+                end
+            end
+            task.wait(0.1)
+        end
+        for _, ore in ipairs(worldOres:GetChildren()) do
+            for _, desc in ipairs(ore:GetDescendants()) do
+                if desc.Name == "OreESP" or desc.Name == "ESPText" then
+                    desc:Destroy()
+                end
+            end
+        end
+    end
+})
+-- TAB 2 --
+local SecondTab = Window:CreateTab("Shop Tp🏠", nil) -- Title, Image
+local SecondSection = SecondTab:CreateSection("Teleports (VEHICLE SUPPORT)")
+local Button = SecondTab:CreateButton({
+   Name = "ucs",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1262.15, 33.37, -700.86)))
+   end,
+})
+local Button = SecondTab:CreateButton({
+   Name = "Beach shop",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1788.73, 24.5, -1365.55)))
+   end,
+})
+local Button = SecondTab:CreateButton({
+   Name = "Silvers",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(920.57, 51.36, -705.38)))
+   end,
+})
+
+local Button = SecondTab:CreateButton({
+   Name = "Coals Furniture",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1175.73, 122.84, 545.74)))
+   end,
+})
+
+local Button = SecondTab:CreateButton({
+   Name = "Vi s",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-5171.56, 106.73, -2806.18)))
+   end,
+})
+
+local Button = SecondTab:CreateButton({
+   Name = "Melonis shop",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-579.87, -509.99, 1022.24)))
+    end,
+})
+
+
+local Button = SecondTab:CreateButton({
+   Name = "oil shop",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-2279.97, 97.15, 5339.59)))
+   end,
+})
+
+--THIRD TAB--
+local thirdTab = Window:CreateTab("Useful tols", nil) -- Title, Image
+local thirdSection = thirdTab:CreateSection("Necesities")
+local Button = thirdTab:CreateButton({
+   Name = "IY",
+   Callback = function()
+   loadstring(game:HttpGet('https://raw.githubusercontent.com/DarkNetworks/Infinite-Yield/main/latest.lua'))()
+   end,
+})
+
+local Button = thirdTab:CreateButton({
+   Name = "Set ur own TP",
+   Callback = function()
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/oxireun/Script/refs/heads/main/teleporter.lua"))()
+   end,
+})local thirdSection = thirdTab:CreateSection("Necesities")
 local Button = thirdTab:CreateButton({
    Name = "IY",
    Callback = function()
