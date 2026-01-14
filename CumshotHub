@@ -729,33 +729,27 @@ local Button = thirdTab:CreateButton({
    Callback = function()
    loadstring(game:HttpGet('https://raw.githubusercontent.com/DarkNetworks/Infinite-Yield/main/latest.lua'))()
    end,
-})
-
+})  
 local Button = thirdTab:CreateButton({
    Name = "Set ur own TP",
    Callback = function()
    loadstring(game:HttpGet("https://raw.githubusercontent.com/oxireun/Script/refs/heads/main/teleporter.lua"))()
    end,
 })
+
 local Button = thirdTab:CreateButton({
-   Name = "Enable Instant 100% hit",
+   Name = "Auto 100% Hit",
    Callback = function()
-   Rayfield:Notify({
-      Title = "⚠️ WARNING ⚠️",
-      Content = "You cant untoggle this until u leave the game.",
-      Duration = 5,
-      Image = nil,
-   })
+   
    while true do
    local args = {
 	   {
-	   	   Alpha = 1,
+		   Alpha = 1,
 		   ResponseTime = 1
 	   }
    }
    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Tools"):WaitForChild("Attack"):FireServer(unpack(args))
    wait()
    end
-end,
+   end,
 })
-
