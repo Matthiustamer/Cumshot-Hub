@@ -736,17 +736,22 @@ local Button = thirdTab:CreateButton({
    Callback = function()
    loadstring(game:HttpGet("https://raw.githubusercontent.com/oxireun/Script/refs/heads/main/teleporter.lua"))()
    end,
-})local thirdSection = thirdTab:CreateSection("Necesities")
-local Button = thirdTab:CreateButton({
-   Name = "IY",
-   Callback = function()
-   loadstring(game:HttpGet('https://raw.githubusercontent.com/DarkNetworks/Infinite-Yield/main/latest.lua'))()
-   end,
-})
 
-local Button = thirdTab:CreateButton({
-   Name = "Set ur own TP",
-   Callback = function()
-   loadstring(game:HttpGet("https://raw.githubusercontent.com/oxireun/Script/refs/heads/main/teleporter.lua"))()
+local Toggle = Tab:CreateToggle({
+   Name = "Toggle Instant 100%",
+   CurrentValue = false,
+   Flag = "Instant 100%", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)   
+while CurrentValue = true do
+local args = {
+	{
+		Alpha = 1,
+		ResponseTime = 1
+	}
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Tools"):WaitForChild("Attack"):FireServer(unpack(args))
+wait(0.01)
+end-- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
    end,
 })
