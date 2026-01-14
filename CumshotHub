@@ -753,13 +753,3 @@ local Button = thirdTab:CreateButton({
    end
    end,
 })
-
-local Button = thirdTab:CreateButton({
-   Name = "AUTO SELL (please use a boat...)",
-   Callback = function()
-   wait()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(920.57, 51.36, -705.38)))
-   wait(0.5)
-   
-   end,
-})
