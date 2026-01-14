@@ -740,6 +740,12 @@ local Button = thirdTab:CreateButton({
 local Button = thirdTab:CreateBytton({
    Name = "Enable Instant 100% hit",
    Callback = function()
+   Rayfield:Notify({
+      Title = "⚠️ WARNING ⚠️",
+      Content = "You cant untoggle this until u leave the game.",
+      Duration = 5,
+      Image = nil,
+   })
    while true do
    local args = {
 	   {
