@@ -760,13 +760,6 @@ local Button = thirdTab:CreateButton({
    wait()
    game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(920.57, 51.36, -705.38)))
    wait(0.5)
-   workspace:WaitForChild("Map"):WaitForChild("Structures"):WaitForChild("Nova_Sellary"):WaitForChild("TalkPart"):WaitForChild("Interact"):FireServer()
-
-   local args = {
-	   "Deal",
-	   1
-   }
-   workspace:WaitForChild("Map"):WaitForChild("Structures"):WaitForChild("Nova_Sellary"):WaitForChild("TalkPart"):WaitForChild("Interact"):FireServer(unpack(args))
-
+   
    end,
 })
