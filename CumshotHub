@@ -737,7 +737,7 @@ local Button = thirdTab:CreateButton({
    loadstring(game:HttpGet("https://raw.githubusercontent.com/oxireun/Script/refs/heads/main/teleporter.lua"))()
    end,
 })
-local Button = thirdTab:CreateBytton({
+local Button = thirdTab:CreateButton({
    Name = "Enable Instant 100% hit",
    Callback = function()
    Rayfield:Notify({
