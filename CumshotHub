@@ -767,3 +767,44 @@ local Button = thirdTab:CreateButton({
    workspace:WaitForChild("Map"):WaitForChild("Structures"):WaitForChild("Nova_Sellary"):WaitForChild("TalkPart"):WaitForChild("Interact"):FireServer(unpack(args))
    end,
 })
+local FourthTab = Window:CreateTab("Abysalite Setup", nil) -- Title, Image
+local FourthSection = SecondTab:CreateSection("Free mone 🤑")
+local Button = FourthTab:CreateButton({
+   Name = "preperation",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1788.73, 24.5, -1365.55)))
+   local args = {
+	   {
+		   Index = 2,
+		   Color = Color3.new(0.20000000298023224, 0.20000000298023224, 0.20000000298023224),
+		   DisplayText = "Haulfreight [$800]",
+		   Text = "Haulfreight",
+		   SelectedColor = Color3.new(1, 1, 1)
+	   }
+   }
+   workspace:WaitForChild("Map"):WaitForChild("Structures"):WaitForChild("Docks"):WaitForChild("Nova1"):WaitForChild("Spawns"):WaitForChild("Part"):WaitForChild("Interact"):FireServer(unpack(args))
+   Rayfield:Notify({
+   Title = "GET in the BOAT! (5 seconds before tp!)!",
+   Content = "you will shortly be sent to the cursed cave.. (Make sure to enable Vfly!)",
+   Duration = 1.5,
+   Image = nil,
+   })
+   wait(7)
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-7120.7, -680.35, -2544.24)))
+   end,
+})
+local Button = FourthTab:CreateButton({
+   Name = "Sell em (make sure Vfly enabled)",
+   Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(920.57, 51.36, -705.38)))
+   wait(0.3)
+   workspace:WaitForChild("Map"):WaitForChild("Structures"):WaitForChild("Nova_Sellary"):WaitForChild("TalkPart"):WaitForChild("Interact"):FireServer()
+   local args = {
+	   "Deal",
+	   1
+   }
+   workspace:WaitForChild("Map"):WaitForChild("Structures"):WaitForChild("Nova_Sellary"):WaitForChild("TalkPart"):WaitForChild("Interact"):FireServer(unpack(args))
+   wait(2)
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-7120.7, -680.35, -2544.24)))
+   end,
+})  
