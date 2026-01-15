@@ -772,7 +772,7 @@ local FourthSection = SecondTab:CreateSection("Free mone 🤑")
 local Button = FourthTab:CreateButton({
    Name = "preperation",
    Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1788.73, 24.5, -1365.55)))
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1817.56, 4.52, -1451.22)))
    local args = {
 	   {
 		   Index = 2,
@@ -786,10 +786,10 @@ local Button = FourthTab:CreateButton({
    Rayfield:Notify({
    Title = "GET in the BOAT! (5 seconds before tp!)!",
    Content = "you will shortly be sent to the cursed cave.. (Make sure to enable Vfly!)",
-   Duration = 1.5,
+   Duration = 3.5,
    Image = nil,
    })
-   wait(7)
+   wait(13)
    game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-7120.7, -680.35, -2544.24)))
    end,
 })
