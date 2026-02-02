@@ -27,7 +27,7 @@ local Window = Rayfield:CreateWindow({
       RememberJoins = true -- Set this to false to make them join the discord every time they load it up
    },
 
-   KeySystem = true, -- Set this to true to use our key system
+   KeySystem = false, -- Set this to true to use our key system
    KeySettings = {
       Title = "Cumshot Hub",
       Subtitle = "Key System",
@@ -808,3 +808,96 @@ local Button = FourthTab:CreateButton({
    game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-7120.7, -680.35, -2544.24)))
    end,
 })  
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
+
+local player = Players.LocalPlayer
+local camera = Workspace.CurrentCamera
+
+local camConnection
+local oldCameraType
+local oldCameraSubject
+local running = false
+
+local MODEL_NAME = "Abysalite"
+
+-- find nearest model (searches inside folders)
+local function getNearestModel()
+	local character = player.Character
+	if not character or not character:FindFirstChild("HumanoidRootPart") then
+		return nil
+	end
+
+	local root = character.HumanoidRootPart
+	local nearestModel = nil
+	local shortestDist = math.huge
+
+	for _, obj in ipairs(Workspace:GetDescendants()) do
+		if obj:IsA("Model") and obj.Name == MODEL_NAME and obj.PrimaryPart then
+			local dist = (obj.PrimaryPart.Position - root.Position).Magnitude
+			if dist < shortestDist then
+				shortestDist = dist
+				nearestModel = obj
+			end
+		end
+	end
+
+	return nearestModel
+end
+
+-- find clickdetector in model
+local function getClickDetector(model)
+	for _, d in ipairs(model:GetDescendants()) do
+		if d:IsA("ClickDetector") then
+			return d
+		end
+	end
+end
+
+local Toggle = FourthTab:CreateToggle({
+	Name = "Toggle Example",
+	CurrentValue = false,
+	Flag = "Toggle1",
+	Callback = function(Value)
+
+		if Value then
+			running = true
+
+			oldCameraType = camera.CameraType
+			oldCameraSubject = camera.CameraSubject
+			camera.CameraType = Enum.CameraType.Scriptable
+
+			camConnection = RunService.RenderStepped:Connect(function()
+				if not running then return end
+
+				local model = getNearestModel()
+				if not model then return end
+
+				local part = model.PrimaryPart
+				if not part then return end
+
+				-- force camera look
+				local camOffset = Vector3.new(0, 3, 8)
+				camera.CFrame = CFrame.new(part.Position + camOffset, part.Position)
+
+				-- auto click
+				local clickDetector = getClickDetector(model)
+				if clickDetector then
+					clickDetector:FireServer()
+				end
+			end)
+
+		else
+			running = false
+
+			if camConnection then
+				camConnection:Disconnect()
+				camConnection = nil
+			end
+
+			camera.CameraType = oldCameraType or Enum.CameraType.Custom
+			camera.CameraSubject = oldCameraSubject
+		end
+	end,
+})
