@@ -818,7 +818,7 @@ local running = false
 local clickConnection
 local currentTarget
 
-local MODEL_NAME = "Abysalite"
+local MODEL_NAME = "Abyssalite"
 local CLICK_COOLDOWN = 0.1 -- seconds between clicks
 local lastClick = 0
 
