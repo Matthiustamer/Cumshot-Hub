@@ -818,10 +818,9 @@ local camera = Workspace.CurrentCamera
 local running = false
 local loopConnection
 
-local oldCameraType
-local oldCameraSubject
 local oldMinZoom
 local oldMaxZoom
+local oldCameraType
 
 local angle = 0
 local RADIUS = 6
@@ -848,19 +847,19 @@ local Toggle = FourthTab:CreateToggle({
 			angle = 0
 
 			local character = player.Character or player.CharacterAdded:Wait()
+			local humanoid = character:WaitForChild("Humanoid")
 			local root = character:WaitForChild("HumanoidRootPart")
-			local head = character:WaitForChild("Head")
 
-			-- save camera + zoom
-			oldCameraType = camera.CameraType
-			oldCameraSubject = camera.CameraSubject
+			-- save camera state
 			oldMinZoom = player.CameraMinZoomDistance
 			oldMaxZoom = player.CameraMaxZoomDistance
+			oldCameraType = camera.CameraType
 
-			-- force first person
+			-- TRUE first person
 			player.CameraMinZoomDistance = 0
 			player.CameraMaxZoomDistance = 0
-			camera.CameraType = Enum.CameraType.Scriptable
+			camera.CameraType = Enum.CameraType.Custom
+			humanoid.AutoRotate = false
 
 			loopConnection = RunService.RenderStepped:Connect(function(dt)
 				if not running then return end
@@ -878,12 +877,10 @@ local Toggle = FourthTab:CreateToggle({
 					math.sin(angle) * RADIUS
 				)
 
-				-- teleport body (aura)
-				root.CFrame = CFrame.new(center + offset, center)
+				local pos = center + offset
 
-				-- FIRST PERSON CAMERA (at head, looking at model)
-				local headPos = head.Position
-				camera.CFrame = CFrame.lookAt(headPos, center)
+				-- rotate BODY to face model (this makes camera spin naturally)
+				root.CFrame = CFrame.new(pos, center)
 			end)
 
 		else
@@ -894,11 +891,15 @@ local Toggle = FourthTab:CreateToggle({
 				loopConnection = nil
 			end
 
-			-- restore camera + zoom
+			-- restore camera
 			player.CameraMinZoomDistance = oldMinZoom or 0.5
 			player.CameraMaxZoomDistance = oldMaxZoom or 12
 			camera.CameraType = oldCameraType or Enum.CameraType.Custom
-			camera.CameraSubject = oldCameraSubject
+
+			local character = player.Character
+			if character and character:FindFirstChild("Humanoid") then
+				character.Humanoid.AutoRotate = true
+			end
 		end
 	end,
 })
