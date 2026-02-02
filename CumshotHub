@@ -820,11 +820,13 @@ local loopConnection
 
 local oldCameraType
 local oldCameraSubject
+local oldMinZoom
+local oldMaxZoom
 
 local angle = 0
-local RADIUS = 6        -- distance from model
-local HEIGHT = 2        -- height offset
-local ROT_SPEED = 3     -- orbit speed
+local RADIUS = 6
+local HEIGHT = 2
+local ROT_SPEED = 3
 
 -- find Abyssalite anywhere
 local function findAbyssalite()
@@ -847,9 +849,17 @@ local Toggle = FourthTab:CreateToggle({
 
 			local character = player.Character or player.CharacterAdded:Wait()
 			local root = character:WaitForChild("HumanoidRootPart")
+			local head = character:WaitForChild("Head")
 
+			-- save camera + zoom
 			oldCameraType = camera.CameraType
 			oldCameraSubject = camera.CameraSubject
+			oldMinZoom = player.CameraMinZoomDistance
+			oldMaxZoom = player.CameraMaxZoomDistance
+
+			-- force first person
+			player.CameraMinZoomDistance = 0
+			player.CameraMaxZoomDistance = 0
 			camera.CameraType = Enum.CameraType.Scriptable
 
 			loopConnection = RunService.RenderStepped:Connect(function(dt)
@@ -868,12 +878,12 @@ local Toggle = FourthTab:CreateToggle({
 					math.sin(angle) * RADIUS
 				)
 
-				-- spam teleport (aura)
+				-- teleport body (aura)
 				root.CFrame = CFrame.new(center + offset, center)
 
-				-- force camera to face model
-				local camPos = center + Vector3.new(0, HEIGHT + 3, RADIUS + 4)
-				camera.CFrame = CFrame.lookAt(camPos, center)
+				-- FIRST PERSON CAMERA (at head, looking at model)
+				local headPos = head.Position
+				camera.CFrame = CFrame.lookAt(headPos, center)
 			end)
 
 		else
@@ -884,6 +894,9 @@ local Toggle = FourthTab:CreateToggle({
 				loopConnection = nil
 			end
 
+			-- restore camera + zoom
+			player.CameraMinZoomDistance = oldMinZoom or 0.5
+			player.CameraMaxZoomDistance = oldMaxZoom or 12
 			camera.CameraType = oldCameraType or Enum.CameraType.Custom
 			camera.CameraSubject = oldCameraSubject
 		end
