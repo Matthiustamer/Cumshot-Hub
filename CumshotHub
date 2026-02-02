@@ -811,48 +811,28 @@ local Button = FourthTab:CreateButton({
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
-local VirtualInputManager = game:GetService("VirtualInputManager")
 
 local player = Players.LocalPlayer
 local camera = Workspace.CurrentCamera
 
 local running = false
-local clickConnection
-local CLICK_COOLDOWN = 0.2
-local lastClick = 0
+local loopConnection
+
+local oldCameraType
+local oldCameraSubject
+
+local angle = 0
+local RADIUS = 6        -- distance from model
+local HEIGHT = 2        -- height offset
+local ROT_SPEED = 3     -- orbit speed
 
 -- find Abyssalite anywhere
-local function findHitbox()
+local function findAbyssalite()
 	for _, obj in ipairs(Workspace:GetDescendants()) do
-		if obj:IsA("Model") and obj.Name == "Abyssalite" then
-			return obj:FindFirstChild("Hitbox", true)
+		if obj:IsA("Model") and obj.Name == "Abyssalite" and obj.PrimaryPart then
+			return obj
 		end
 	end
-end
-
--- force a real mouse click on a part
-local function forceClick(part)
-	if not part:IsA("BasePart") then return end
-
-	local screenPos, onScreen = camera:WorldToViewportPoint(part.Position)
-	if not onScreen then return end
-
-	VirtualInputManager:SendMouseButtonEvent(
-		screenPos.X,
-		screenPos.Y,
-		0,
-		true,
-		game,
-		0
-	)
-	VirtualInputManager:SendMouseButtonEvent(
-		screenPos.X,
-		screenPos.Y,
-		0,
-		false,
-		game,
-		0
-	)
 end
 
 local Toggle = FourthTab:CreateToggle({
@@ -863,35 +843,49 @@ local Toggle = FourthTab:CreateToggle({
 
 		if Value then
 			running = true
+			angle = 0
 
-			clickConnection = RunService.Heartbeat:Connect(function()
+			local character = player.Character or player.CharacterAdded:Wait()
+			local root = character:WaitForChild("HumanoidRootPart")
+
+			oldCameraType = camera.CameraType
+			oldCameraSubject = camera.CameraSubject
+			camera.CameraType = Enum.CameraType.Scriptable
+
+			loopConnection = RunService.RenderStepped:Connect(function(dt)
 				if not running then return end
-				if os.clock() - lastClick < CLICK_COOLDOWN then return end
-				lastClick = os.clock()
 
-				local hitbox = findHitbox()
-				if not hitbox then return end
+				local abyssalite = findAbyssalite()
+				if not abyssalite then return end
 
-				-- click hitbox itself
-				if hitbox:IsA("BasePart") then
-					forceClick(hitbox)
-				end
+				local center = abyssalite.PrimaryPart.Position
 
-				-- click children of hitbox
-				for _, obj in ipairs(hitbox:GetDescendants()) do
-					if obj:IsA("BasePart") then
-						forceClick(obj)
-					end
-				end
+				-- orbit math
+				angle += dt * ROT_SPEED
+				local offset = Vector3.new(
+					math.cos(angle) * RADIUS,
+					HEIGHT,
+					math.sin(angle) * RADIUS
+				)
+
+				-- spam teleport (aura)
+				root.CFrame = CFrame.new(center + offset, center)
+
+				-- force camera to face model
+				local camPos = center + Vector3.new(0, HEIGHT + 3, RADIUS + 4)
+				camera.CFrame = CFrame.lookAt(camPos, center)
 			end)
 
 		else
 			running = false
 
-			if clickConnection then
-				clickConnection:Disconnect()
-				clickConnection = nil
+			if loopConnection then
+				loopConnection:Disconnect()
+				loopConnection = nil
 			end
+
+			camera.CameraType = oldCameraType or Enum.CameraType.Custom
+			camera.CameraSubject = oldCameraSubject
 		end
 	end,
 })
