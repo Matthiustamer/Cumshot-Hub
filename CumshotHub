@@ -849,6 +849,7 @@ local Toggle = FourthTab:CreateToggle({
 			local character = player.Character or player.CharacterAdded:Wait()
 			local humanoid = character:WaitForChild("Humanoid")
 			local root = character:WaitForChild("HumanoidRootPart")
+			local head = character:WaitForChild("Head")
 
 			-- save camera state
 			oldMinZoom = player.CameraMinZoomDistance
@@ -869,7 +870,7 @@ local Toggle = FourthTab:CreateToggle({
 
 				local center = abyssalite.PrimaryPart.Position
 
-				-- orbit math
+				-- orbit movement
 				angle += dt * ROT_SPEED
 				local offset = Vector3.new(
 					math.cos(angle) * RADIUS,
@@ -879,8 +880,12 @@ local Toggle = FourthTab:CreateToggle({
 
 				local pos = center + offset
 
-				-- rotate BODY to face model (this makes camera spin naturally)
+				-- rotate BODY to face model
 				root.CFrame = CFrame.new(pos, center)
+
+				-- 🔒 FORCE CAMERA ROTATION (this is the missing piece)
+				local camPos = camera.CFrame.Position -- let Roblox handle position
+				camera.CFrame = CFrame.lookAt(camPos, center)
 			end)
 
 		else
