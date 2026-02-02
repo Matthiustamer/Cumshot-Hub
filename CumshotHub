@@ -820,39 +820,29 @@ local oldCameraType
 local oldCameraSubject
 local running = false
 
-local MODEL_NAME = "Abysalite"
+local MODEL_NAME = "TargetModel"
+local currentTarget -- cached target so camera keeps moving
 
--- find nearest model (searches inside folders)
+-- find nearest model (recursive)
 local function getNearestModel()
 	local character = player.Character
-	if not character or not character:FindFirstChild("HumanoidRootPart") then
-		return nil
-	end
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if not root then return nil end
 
-	local root = character.HumanoidRootPart
-	local nearestModel = nil
-	local shortestDist = math.huge
+	local nearest
+	local shortest = math.huge
 
 	for _, obj in ipairs(Workspace:GetDescendants()) do
 		if obj:IsA("Model") and obj.Name == MODEL_NAME and obj.PrimaryPart then
 			local dist = (obj.PrimaryPart.Position - root.Position).Magnitude
-			if dist < shortestDist then
-				shortestDist = dist
-				nearestModel = obj
+			if dist < shortest then
+				shortest = dist
+				nearest = obj
 			end
 		end
 	end
 
-	return nearestModel
-end
-
--- find clickdetector in model
-local function getClickDetector(model)
-	for _, d in ipairs(model:GetDescendants()) do
-		if d:IsA("ClickDetector") then
-			return d
-		end
-	end
+	return nearest
 end
 
 local Toggle = FourthTab:CreateToggle({
@@ -871,25 +861,25 @@ local Toggle = FourthTab:CreateToggle({
 			camConnection = RunService.RenderStepped:Connect(function()
 				if not running then return end
 
-				local model = getNearestModel()
-				if not model then return end
+				-- update target if missing or removed
+				if not currentTarget or not currentTarget.Parent then
+					currentTarget = getNearestModel()
+				end
 
-				local part = model.PrimaryPart
-				if not part then return end
+				if currentTarget and currentTarget.PrimaryPart then
+					local part = currentTarget.PrimaryPart
 
-				-- force camera look
-				local camOffset = Vector3.new(0, 3, 8)
-				camera.CFrame = CFrame.new(part.Position + camOffset, part.Position)
+					local offset = Vector3.new(0, 3, 8)
+					local camPos = part.Position + offset
 
-				-- auto click
-				local clickDetector = getClickDetector(model)
-				if clickDetector then
-					clickDetector:FireServer()
+					-- THIS is the important part
+					camera.CFrame = CFrame.lookAt(camPos, part.Position)
 				end
 			end)
 
 		else
 			running = false
+			currentTarget = nil
 
 			if camConnection then
 				camConnection:Disconnect()
