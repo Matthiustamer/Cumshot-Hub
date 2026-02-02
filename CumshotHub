@@ -813,17 +813,16 @@ local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 
 local player = Players.LocalPlayer
-local camera = Workspace.CurrentCamera
 
-local camConnection
-local oldCameraType
-local oldCameraSubject
 local running = false
+local clickConnection
+local currentTarget
 
-local MODEL_NAME = "TargetModel"
-local currentTarget -- cached target so camera keeps moving
+local MODEL_NAME = "Abysalite"
+local CLICK_COOLDOWN = 0.1 -- seconds between clicks
+local lastClick = 0
 
--- find nearest model (recursive)
+-- find nearest model (recursive, inside folders)
 local function getNearestModel()
 	local character = player.Character
 	local root = character and character:FindFirstChild("HumanoidRootPart")
@@ -845,6 +844,15 @@ local function getNearestModel()
 	return nearest
 end
 
+-- find ClickDetector inside model
+local function getClickDetector(model)
+	for _, d in ipairs(model:GetDescendants()) do
+		if d:IsA("ClickDetector") then
+			return d
+		end
+	end
+end
+
 local Toggle = FourthTab:CreateToggle({
 	Name = "Toggle Example",
 	CurrentValue = false,
@@ -853,27 +861,25 @@ local Toggle = FourthTab:CreateToggle({
 
 		if Value then
 			running = true
+			currentTarget = nil
 
-			oldCameraType = camera.CameraType
-			oldCameraSubject = camera.CameraSubject
-			camera.CameraType = Enum.CameraType.Scriptable
-
-			camConnection = RunService.RenderStepped:Connect(function()
+			clickConnection = RunService.Heartbeat:Connect(function()
 				if not running then return end
 
-				-- update target if missing or removed
+				-- switch target if missing or removed
 				if not currentTarget or not currentTarget.Parent then
 					currentTarget = getNearestModel()
 				end
 
-				if currentTarget and currentTarget.PrimaryPart then
-					local part = currentTarget.PrimaryPart
+				if not currentTarget then return end
 
-					local offset = Vector3.new(0, 3, 8)
-					local camPos = part.Position + offset
+				local clickDetector = getClickDetector(currentTarget)
+				if not clickDetector then return end
 
-					-- THIS is the important part
-					camera.CFrame = CFrame.lookAt(camPos, part.Position)
+				-- click cooldown
+				if os.clock() - lastClick >= CLICK_COOLDOWN then
+					lastClick = os.clock()
+					clickDetector:FireServer()
 				end
 			end)
 
@@ -881,13 +887,10 @@ local Toggle = FourthTab:CreateToggle({
 			running = false
 			currentTarget = nil
 
-			if camConnection then
-				camConnection:Disconnect()
-				camConnection = nil
+			if clickConnection then
+				clickConnection:Disconnect()
+				clickConnection = nil
 			end
-
-			camera.CameraType = oldCameraType or Enum.CameraType.Custom
-			camera.CameraSubject = oldCameraSubject
 		end
 	end,
 })
