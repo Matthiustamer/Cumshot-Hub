@@ -797,60 +797,62 @@ local Button = FourthTab:CreateButton({
    Name = "Sell em (make sure Vfly enabled)",
    Callback = function()
    game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(920.57, 51.36, -705.38)))
-   wait(0.3)
+   wait(2)
    workspace:WaitForChild("Map"):WaitForChild("Structures"):WaitForChild("Nova_Sellary"):WaitForChild("TalkPart"):WaitForChild("Interact"):FireServer()
    local args = {
 	   "Deal",
 	   1
    }
    workspace:WaitForChild("Map"):WaitForChild("Structures"):WaitForChild("Nova_Sellary"):WaitForChild("TalkPart"):WaitForChild("Interact"):FireServer(unpack(args))
-   wait(2)
+   wait(1)
    game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-7120.7, -680.35, -2544.24)))
    end,
 })  
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
+local VirtualInputManager = game:GetService("VirtualInputManager")
 
 local player = Players.LocalPlayer
+local camera = Workspace.CurrentCamera
 
 local running = false
 local clickConnection
-local currentTarget
-
-local MODEL_NAME = "Abyssalite"
-local CLICK_COOLDOWN = 0.1 -- seconds between clicks
+local CLICK_COOLDOWN = 0.2
 local lastClick = 0
 
--- find nearest model (recursive, inside folders)
-local function getNearestModel()
-	local character = player.Character
-	local root = character and character:FindFirstChild("HumanoidRootPart")
-	if not root then return nil end
-
-	local nearest
-	local shortest = math.huge
-
+-- find Abyssalite anywhere
+local function findHitbox()
 	for _, obj in ipairs(Workspace:GetDescendants()) do
-		if obj:IsA("Model") and obj.Name == MODEL_NAME and obj.PrimaryPart then
-			local dist = (obj.PrimaryPart.Position - root.Position).Magnitude
-			if dist < shortest then
-				shortest = dist
-				nearest = obj
-			end
+		if obj:IsA("Model") and obj.Name == "Abyssalite" then
+			return obj:FindFirstChild("Hitbox", true)
 		end
 	end
-
-	return nearest
 end
 
--- find ClickDetector inside model
-local function getClickDetector(model)
-	for _, d in ipairs(model:GetDescendants()) do
-		if d:IsA("ClickDetector") then
-			return d
-		end
-	end
+-- force a real mouse click on a part
+local function forceClick(part)
+	if not part:IsA("BasePart") then return end
+
+	local screenPos, onScreen = camera:WorldToViewportPoint(part.Position)
+	if not onScreen then return end
+
+	VirtualInputManager:SendMouseButtonEvent(
+		screenPos.X,
+		screenPos.Y,
+		0,
+		true,
+		game,
+		0
+	)
+	VirtualInputManager:SendMouseButtonEvent(
+		screenPos.X,
+		screenPos.Y,
+		0,
+		false,
+		game,
+		0
+	)
 end
 
 local Toggle = FourthTab:CreateToggle({
@@ -861,31 +863,30 @@ local Toggle = FourthTab:CreateToggle({
 
 		if Value then
 			running = true
-			currentTarget = nil
 
 			clickConnection = RunService.Heartbeat:Connect(function()
 				if not running then return end
+				if os.clock() - lastClick < CLICK_COOLDOWN then return end
+				lastClick = os.clock()
 
-				-- switch target if missing or removed
-				if not currentTarget or not currentTarget.Parent then
-					currentTarget = getNearestModel()
+				local hitbox = findHitbox()
+				if not hitbox then return end
+
+				-- click hitbox itself
+				if hitbox:IsA("BasePart") then
+					forceClick(hitbox)
 				end
 
-				if not currentTarget then return end
-
-				local clickDetector = getClickDetector(currentTarget)
-				if not clickDetector then return end
-
-				-- click cooldown
-				if os.clock() - lastClick >= CLICK_COOLDOWN then
-					lastClick = os.clock()
-					clickDetector:FireServer()
+				-- click children of hitbox
+				for _, obj in ipairs(hitbox:GetDescendants()) do
+					if obj:IsA("BasePart") then
+						forceClick(obj)
+					end
 				end
 			end)
 
 		else
 			running = false
-			currentTarget = nil
 
 			if clickConnection then
 				clickConnection:Disconnect()
