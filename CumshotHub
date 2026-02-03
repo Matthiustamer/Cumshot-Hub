@@ -799,14 +799,29 @@ local RADIUS = 6
 local HEIGHT = 2
 local ROT_SPEED = 3
 
+local FourthTab = Window:CreateTab("esp stuff", nil)
+FourthTab:CreateSection("Ore")
+local worldOres = workspace.WorldSpawn.Ores
+
+table.sort(oreOptions)
+
+local oreESPDropdown = FourthTab:CreateDropdown({
+    Name = "Ore Whitelist",
+    Options = oreminer,
+    CurrentOption = {},
+    MultipleOptions = false,
+    Callback = function()end
+})
+
 -- find Abyssalite anywhere
 local function findAbyssalite()
 	for _, obj in ipairs(Workspace:GetDescendants()) do
-		if obj:IsA("Model") and obj.Name == "Abyssalite" and obj.PrimaryPart then
+		if obj:IsA("Model") and obj.Name == oreminer and obj.PrimaryPart then
 			return obj
 		end
 	end
 end
+
 
 local Toggle = FourthTab:CreateToggle({
 	Name = "Toggle Example",
