@@ -200,14 +200,14 @@ local Button = MainTab:CreateButton({
 })
 
 local Button = MainTab:CreateButton({
-    Name = "Sakura Cave",
+   Name = "Sakura Cave",
    Callback = function()
    game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-5186.41, 134.53, 5249.52))) 
    end,
 })
 
 local Button = MainTab:CreateButton({
-    Name = "SporeCave",
+   Name = "SporeCave",
    Callback = function()
    game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-5407.38, -154.13, 5283.38)))
    end,
