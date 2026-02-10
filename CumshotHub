@@ -129,6 +129,9 @@ local Button = MainTab:CreateButton({
 local Button = MainTab:CreateButton({
    Name = "Oil Rig",
    Callback = function()
+   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-2297.17, 134.72, 5395.78))) 
+   end,
+})
 local blocktptab = Window:CreateTab("Block tp thing yeah ", nil) 
 blocktptab:CreateSection("tp w bag")
 local oreList = game:GetService("ReplicatedStorage").Content.Ores
@@ -167,7 +170,7 @@ local trybring = blocktptab:CreateButton({
                 rem:FireServer("Store",v.Part)
                 task.wait(.5)
                 currentIndex = currentIndex + 1
-                if currentIndex >= 5 then
+                if currentIndex >= 4 then
                     for i=1,5 do
                         char:PivotTo(oldPos)
                         task.wait(.1)
@@ -187,9 +190,7 @@ blocktptab:CreateButton({
         local char = plr.Character
         stopTween()
     end
-})   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-2297.17, 134.72, 5395.78))) 
-   end,
-})
+})   
 
 local Button = MainTab:CreateButton({
    Name = "Lunar Palace",
