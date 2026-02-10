@@ -290,7 +290,7 @@ blocktptab:CreateButton({
         running = false
         warn("tp loop finished cleanly")
     end
-})tions)
+})
 
 local oreESPDropdown = visualsTab:CreateDropdown({
     Name = "Ore Whitelist",
