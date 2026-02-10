@@ -129,7 +129,65 @@ local Button = MainTab:CreateButton({
 local Button = MainTab:CreateButton({
    Name = "Oil Rig",
    Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-2297.17, 134.72, 5395.78))) 
+local blocktptab = Window:CreateTab("Block tp thing yeah ", nil) 
+blocktptab:CreateSection("tp w bag")
+local oreList = game:GetService("ReplicatedStorage").Content.Ores
+local oreOptions = {}
+for _,oreModel in oreList:GetChildren() do
+    table.insert(oreOptions,oreModel.Name)
+end
+table.sort(oreOptions)
+local matbtp = blocktptab:CreateDropdown({
+    Name = "Material Whitelist",
+    Options = oreOptions,
+    CurrentOption = {},
+    MultipleOptions = true,
+    Callback = function()end
+})
+
+local trybring = blocktptab:CreateButton({
+    Name = "try tp mat thing",
+    Callback = function()
+        local char = plr.Character
+        local oldPos = char.PrimaryPart.CFrame
+        if not char:FindFirstChild("Item Bag") then
+            plr.Backpack["Item Bag"].Parent = char
+        end
+        local rem = char:WaitForChild("Item Bag"):WaitForChild("Action")
+        local selectedMats = matbtp.CurrentOption
+        local currentIndex = 1
+        for _,v in workspace.Grab:GetChildren() do
+            if not v:FindFirstChild("Owner") then continue end
+            if not table.find(selectedMats, v:GetAttribute("Material")) then continue end
+            if not v:FindFirstChild("Part") then continue end
+            if v.Owner.Value == plr or true then
+                print("Current Index:",currentIndex)
+                tweenTo(v.Part.Position, false, true)
+                task.wait(.1)
+                rem:FireServer("Store",v.Part)
+                task.wait(.5)
+                currentIndex = currentIndex + 1
+                if currentIndex >= 5 then
+                    for i=1,5 do
+                        char:PivotTo(oldPos)
+                        task.wait(.1)
+                        rem:FireServer("Drop")
+                        task.wait(.3)
+                    end
+                    currentIndex = 1
+                end
+            end
+        end
+    end
+})
+
+blocktptab:CreateButton({
+    Name = "Stop Tween",
+    Callback = function()
+        local char = plr.Character
+        stopTween()
+    end
+})   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-2297.17, 134.72, 5395.78))) 
    end,
 })
 
@@ -154,143 +212,7 @@ local Button = MainTab:CreateButton({
    end,
 })
 
-local blocktptab = Window:CreateTab("Block tp thing yeah ", nil) 
 
-
-local visualsTab = Window:CreateTab("esp stuff", nil)
-visualsTab:CreateSection("Ore ESP")
-local worldOres = workspace.WorldSpawn.Ores
-
-table.sort(oreOplocal blocktptab = Window:CreateTab("Block tp thing yeah", nil)
-blocktptab:CreateSection("tp w bag")
-
-local Players = game:GetService("Players")
-local plr = Players.LocalPlayer
-local oreList = game:GetService("ReplicatedStorage").Content.Ores
-
--- ===== dropdown options =====
-local oreOptions = {}
-for _, oreModel in oreList:GetChildren() do
-    table.insert(oreOptions, oreModel.Name)
-end
-table.sort(oreOptions)
-
-local matbtp = blocktptab:CreateDropdown({
-    Name = "Material Whitelist",
-    Options = oreOptions,
-    CurrentOption = {},
-    MultipleOptions = true,
-    Callback = function() end
-})
-
--- ===== SETTINGS =====
-local BAG_LIMIT = 4
-local STORE_WAIT = 0.6
-local DROP_WAIT = 0.5
-local MOVE_WAIT = 0.2
-
--- ===== CONTROL FLAGS =====
-local running = false
-local stored = {}
-
--- ===== STOP BUTTON =====
-blocktptab:CreateButton({
-    Name = "Stop Tween",
-    Callback = function()
-        running = false
-        stopTween()
-        warn("tp stopped")
-    end
-})
-
--- ===== MAIN BUTTON =====
-blocktptab:CreateButton({
-    Name = "try tp mat thing",
-    Callback = function()
-        if running then
-            warn("already running")
-            return
-        end
-
-        running = true
-        stored = {}
-
-        local char = plr.Character or plr.CharacterAdded:Wait()
-        local hrp = char:WaitForChild("HumanoidRootPart")
-        local oldPos = hrp.CFrame
-
-        -- get item bag safely
-        local bag = char:FindFirstChild("Item Bag") or plr.Backpack:FindFirstChild("Item Bag")
-        if not bag then
-            warn("Item Bag not found")
-            running = false
-            return
-        end
-        bag.Parent = char
-
-        local rem = bag:WaitForChild("Action")
-        local selectedMats = matbtp.CurrentOption or {}
-        if #selectedMats == 0 then
-            warn("no materials selected")
-            running = false
-            return
-        end
-
-        local count = 0
-
-        for _, v in workspace.Grab:GetChildren() do
-            if not running then break end
-            if stored[v] then continue end
-            if not v:FindFirstChild("Part") then continue end
-
-            local mat = v:GetAttribute("Material")
-            if not mat then continue end
-            if not table.find(selectedMats, mat) then continue end
-
-            -- move
-            tweenTo(v.Part.Position, false, true)
-            task.wait(MOVE_WAIT)
-            if not running then break end
-
-            -- store
-            rem:FireServer("Store", v.Part)
-            stored[v] = true
-            count += 1
-
-            task.wait(STORE_WAIT)
-            if not running then break end
-
-            -- drop when full
-            if count >= BAG_LIMIT then
-                char:PivotTo(oldPos)
-                task.wait(0.3)
-
-                for i = 1, BAG_LIMIT do
-                    if not running then break end
-                    rem:FireServer("Drop")
-                    task.wait(DROP_WAIT)
-                end
-
-                count = 0
-            end
-        end
-
-        -- final cleanup drop
-        if running and count > 0 then
-            char:PivotTo(oldPos)
-            task.wait(0.3)
-
-            for i = 1, count do
-                if not running then break end
-                rem:FireServer("Drop")
-                task.wait(DROP_WAIT)
-            end
-        end
-
-        running = false
-        warn("tp loop finished cleanly")
-    end
-})
 
 local oreESPDropdown = visualsTab:CreateDropdown({
     Name = "Ore Whitelist",
