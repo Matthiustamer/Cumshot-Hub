@@ -88,6 +88,12 @@ Rayfield:Notify({
    Duration = 6.5,
    Image = nil,
 })
+Rayfield:Notify({
+   Title = "Current Version 1.0.0",
+   Content = "Uhhhhhhhhhhh so uhm i dont update much sorry",
+   Duration = 6.5,
+   Image = nil,
+})
 
 local Button = MainTab:CreateButton({
    Name = "Cursed Cave",
@@ -558,56 +564,7 @@ oreESPToggle = visualsTab:CreateToggle({
         end
     end
 })
--- TAB 2 --
-local SecondTab = Window:CreateTab("Shop Tp🏠", nil) -- Title, Image
-local SecondSection = SecondTab:CreateSection("Teleports (VEHICLE SUPPORT)")
-local Button = SecondTab:CreateButton({
-   Name = "ucs",
-   Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1262.15, 33.37, -700.86)))
-   end,
-})
-local Button = SecondTab:CreateButton({
-   Name = "Beach shop",
-   Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1788.73, 24.5, -1365.55)))
-   end,
-})
-local Button = SecondTab:CreateButton({
-   Name = "Silvers",
-   Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(920.57, 51.36, -705.38)))
-   end,
-})
 
-local Button = SecondTab:CreateButton({
-   Name = "Coals Furniture",
-   Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(1175.73, 122.84, 545.74)))
-   end,
-})
-
-local Button = SecondTab:CreateButton({
-   Name = "Vi s",
-   Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-5171.56, 106.73, -2806.18)))
-   end,
-})
-
-local Button = SecondTab:CreateButton({
-   Name = "Melonis shop",
-   Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-579.87, -509.99, 1022.24)))
-    end,
-})
-
-
-local Button = SecondTab:CreateButton({
-   Name = "oil shop",
-   Callback = function()
-   game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(-2279.97, 97.15, 5339.59)))
-   end,
-})
 
 --THIRD TAB--
 local thirdTab = Window:CreateTab("Useful tols", nil) -- Title, Image
@@ -642,7 +599,7 @@ local Button = thirdTab:CreateButton({
    end,
 })
 local Button = thirdTab:CreateButton({
-   Name = "Auto sell (Use a boat)",
+   Name = "Auto sell (Use a boat) RISKY DONT USE!",
    Callback = function()
    wait(0.1)
    game.Players.LocalPlayer.Character:PivotTo(CFrame.new(Vector3.new(920.57, 51.36, -705.38)))
