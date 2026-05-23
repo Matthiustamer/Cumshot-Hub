@@ -5,10 +5,10 @@ local plr = game.Players.LocalPlayer
 local Window = Rayfield:CreateWindow({
    Name = "Cumshot Hub",
    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-   LoadingTitle = "Rayfield Interface Suite",
-   LoadingSubtitle = "by uhhh idk",
-   ShowText = "Rayfield", -- for mobile users to unhide rayfield, change if you'd like
-   Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+   LoadingTitle = "Cumshot Deluxe",
+   LoadingSubtitle = "By uhhidk?",
+   ShowText = "CumInsideMe", -- for mobile users to unhide rayfield, change if you'd like
+   Theme = "Green", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
    ToggleUIKeybind = Enum.KeyCode.RightControl, -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
 
@@ -90,7 +90,7 @@ Rayfield:Notify({
 })
 Rayfield:Notify({
    Title = "Current Version 1.0.0",
-   Content = "Uhhhhhhhhhhh so uhm i dont update much sorry",
+   Content = "NO! not made by a 12 yewarold",
    Duration = 6.5,
    Image = nil,
 })
