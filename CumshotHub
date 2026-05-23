@@ -569,6 +569,18 @@ oreESPToggle = visualsTab:CreateToggle({
 --THIRD TAB--
 local thirdTab = Window:CreateTab("Useful tols", nil) -- Title, Image
 local thirdSection = thirdTab:CreateSection("Necesities")
+local Toggle = thirdTab:CreateToggle({
+   Name = "Enable AutoFish",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file; make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
+while true do
+game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Fish"):WaitForChild("ReelSessionHit"):FireServer()
+task.wait(0.001)
+end
+   end,
 local Button = thirdTab:CreateButton({
    Name = "IY",
    Callback = function()
